@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Cars</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Add a New Car</h1>
+      <a href="/" class="back-to-home-link">Back to Home</a>
+    </header>
+    <form action="/addcars" method="POST">
+      <label for="carName">Car Name:</label>
+      <input type="text" id="carName" name="carName" required />
+
+      <label for="releaseDate">Release Date:</label>
+      <input type="text" id="releaseDate" name="releaseDate" required />
+
+      <label for="photoUrl">Photo URL:</label>
+      <input type="url" id="photoUrl" name="photoUrl" required />
+
+      <button type="submit">Add Car</button>
+    </form>
+  </body>
+</html>

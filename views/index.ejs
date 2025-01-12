@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cars Grid</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <header>
+        <h1>lamborghini collection</h1>
+        <a href="/addcars" class="add-car-link">Add a New Car</a>
+    </header>
+    <div class="cars-grid">
+        <% cars.forEach(car => { %>
+            <div class="car-card">
+                <img src="<%= car.photoUrl %>" alt="<%= car.carName %>">
+                <h2><%= car.carName %></h2>
+                <p>Release Date: <%= car.releaseDate %></p>
+            </div>
+        <% }) %>
+    </div>
+</body>
+</html>
