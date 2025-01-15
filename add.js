@@ -8,10 +8,14 @@ module.exports = (db) => {
 
   router.post("/addcars", (req, res) => {
     const { carName, releaseDate, photoUrl } = req.body;
-    const query = "INSERT INTO cars (carName, releaseDate, photoUrl) VALUES (?, ?, ?)";
+    const query =
+      "INSERT INTO cars (carName, releaseDate, photoUrl) VALUES (?, ?, ?)";
     db.query(query, [carName, releaseDate, photoUrl], (err, result) => {
       if (err) {
-        console.error("Erreur lors de l'insertion des données dans la base de données :", err);
+        console.error(
+          "Erreur lors de l'insertion des données dans la base de données :",
+          err
+        );
         res.status(500).send("Erreur serveur");
       } else {
         res.redirect("/");
