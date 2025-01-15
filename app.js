@@ -1,7 +1,10 @@
 const express = require("express");
 const app = express();
 const path = require("path");
-const fs = require("fs");
+const mysql = require("mysql");
+
+const addRoutes = require("./add");
+const idRoutes = require("./id");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -9,37 +12,34 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
-const carsFilePath = path.join(__dirname, "cars.json");
+const db = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "",
+  database: "db_cars",
+});
 
-const readCarsFromFile = () => {
-  try {
-    const data = fs.readFileSync(carsFilePath, "utf8");
-    return JSON.parse(data);
-  } catch (err) {
-    return [];
+db.connect((err) => {
+  if (err) {
+    throw err;
   }
-};
-
-const writeCarsToFile = (cars) => {
-  fs.writeFileSync(carsFilePath, JSON.stringify(cars, null, 2), "utf8");
-};
+  console.log("Connecté à la base de données MySQL");
+});
 
 app.get("/", (req, res) => {
-  const cars = readCarsFromFile();
-  res.render("index", { cars });
+  const query = "SELECT * FROM cars";
+  db.query(query, (err, result) => {
+    if (err) {
+      console.error("Erreur lors de la récupération des données :", err);
+      res.status(500).send("Erreur serveur");
+    } else {
+      res.render("index", { cars: result });
+    }
+  });
 });
 
-app.get("/addcars", (req, res) => {
-  res.render("addcars");
-});
-
-app.post("/addcars", (req, res) => {
-  const { carName, releaseDate, photoUrl} = req.body;
-  const cars = readCarsFromFile();
-  cars.push({ carName, releaseDate, photoUrl});
-  writeCarsToFile(cars);
-  res.redirect("/");
-});
+app.use("/", addRoutes(db));
+app.use("/", idRoutes(db));
 
 app.listen(3000, () => {
   console.log("Serveur démarré sur http://localhost:3000");
